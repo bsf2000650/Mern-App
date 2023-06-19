@@ -1,19 +1,22 @@
 // import { useState, useEffect } from "react";
-// import { FaSignInAlt } from "react-icons/fa";
 // import {useSelector, useDispatch} from 'react-redux';
 // import {useNavigate} from 'react-router-dom'
 // import {toast} from 'react-toastify';
-// import { login, reset } from "../features/auth/authSlice";
+// import { FaUser } from "react-icons/fa";
+// import { register, reset } from "../features/auth/authSlice";
 // import Spinner from "../components/Spinner";
 
-// function Login() {
+
+// function Register() {
 
 //     const [formData, setFormData] = useState({
+//         name :'',
 //         email : '',
-//         password: ''
+//         password: '',
+//         password2: ''
 //     })
 
-//     const {email,password} = formData
+//     const {name, email,password,password2} = formData
 
 //     const navigate = useNavigate();
 //     const dispatch = useDispatch();
@@ -24,16 +27,17 @@
 
 //     useEffect(()=>{
 
-//       if(isError){
-//           toast.error(message)
-//       }
+//         if(isError){
+//             toast.error(message)
+//         }
 
-//       if(isSuccess || user) {
-//           navigate('/')
-//       }
+//         if(isSuccess || user) {
+//             navigate('/')
+//         }
 
-//       dispatch(reset())
-//   },[user, isError,isSuccess,message,navigate,dispatch])
+//         dispatch(reset())
+
+//     },[user, isError,isSuccess,message,navigate,dispatch])
 
 //     const onChange = (e) => {
 //         setFormData((prevState)=>({
@@ -43,39 +47,48 @@
 //     }
 
 //     const onSubmit = (e) => {
-//         e.preventDefault()
+//         e.preventDefault();
 
-//         const userData = {
-//           email,
-//           password
+//         if(password !== password2){
+//             toast.error('Passwords do not match')
+//         } else {
+//             const userData ={
+//                 name,
+//                 email,
+//                 password,
+//             }   
+//             dispatch(register(userData))
 //         }
-//         dispatch(login(userData));
 //     }
 
-//     if(isLoading) {
-//       return <Spinner />
+//     if(isLoading){
+//         return <Spinner />
 //     }
 
 //   return (
 //     <>
 //       <section className="heading">
 //         <h1>
-//             <FaSignInAlt />Login
+//             <FaUser />Register
 //         </h1>
-//         <p>Login and start setting goals</p>
+//         <p>Please create an account</p>
 //       </section>
 //       <section className="form">
 //         <form onSubmit={onSubmit}>
-
+//         <div className="form-group">
+//             <input type="text" className="form-control" id="name" name="name" value={name} placeholder="Enter your name" onChange={onChange}/>
+//         </div>
 //         <div className="form-group">
 //             <input type="email" className="form-control" id="email" name="email" value={email} placeholder="Enter your email" onChange={onChange}/>
 //         </div>
 //         <div className="form-group">
 //             <input type="password" className="form-control" id="password" name="password" value={password} placeholder="Enter your password" onChange={onChange}/>
 //         </div>
-
 //         <div className="form-group">
-//             <button type="submit" className="btn btn-block">Login</button>
+//             <input type="password" className="form-control" id="password2" name="password2" value={password2} placeholder="Confirm password" onChange={onChange}/>
+//         </div>
+//         <div className="form-group">
+//             <button type="submit" className="btn btn-block">Register</button>
 //         </div>
 //         </form>
 //       </section>
@@ -83,23 +96,26 @@
 //   )
 // }
 
-// export default Login
+// export default Register
+
 
 import { useState, useEffect } from 'react'
-import { FaSignInAlt } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { login, reset } from '../features/auth/authSlice'
+import { FaUser } from 'react-icons/fa'
+import { register, reset } from '../features/auth/authSlice'
 import Spinner from '../components/Spinner'
 
-function Login() {
+function Register() {
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
+    password2: '',
   })
 
-  const { email, password } = formData
+  const { name, email, password, password2 } = formData
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -130,12 +146,17 @@ function Login() {
   const onSubmit = (e) => {
     e.preventDefault()
 
-    const userData = {
-      email,
-      password,
-    }
+    if (password !== password2) {
+      toast.error('Passwords do not match')
+    } else {
+      const userData = {
+        name,
+        email,
+        password,
+      }
 
-    dispatch(login(userData))
+      dispatch(register(userData))
+    }
   }
 
   if (isLoading) {
@@ -146,13 +167,24 @@ function Login() {
     <>
       <section className='heading'>
         <h1>
-          <FaSignInAlt /> Login
+          <FaUser /> Register
         </h1>
-        <p>Login and start setting goals</p>
+        <p>Please create an account</p>
       </section>
 
       <section className='form'>
         <form onSubmit={onSubmit}>
+          <div className='form-group'>
+            <input
+              type='text'
+              className='form-control'
+              id='name'
+              name='name'
+              value={name}
+              placeholder='Enter your name'
+              onChange={onChange}
+            />
+          </div>
           <div className='form-group'>
             <input
               type='email'
@@ -175,7 +207,17 @@ function Login() {
               onChange={onChange}
             />
           </div>
-
+          <div className='form-group'>
+            <input
+              type='password'
+              className='form-control'
+              id='password2'
+              name='password2'
+              value={password2}
+              placeholder='Confirm password'
+              onChange={onChange}
+            />
+          </div>
           <div className='form-group'>
             <button type='submit' className='btn btn-block'>
               Submit
@@ -187,4 +229,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Register
